@@ -25,4 +25,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: |
+          echo "[]" > src/users.json
+          touch .env
+          yarn build
