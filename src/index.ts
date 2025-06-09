@@ -1,9 +1,11 @@
 import { config } from 'dotenv';
 import { Builder, By, until, WebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
-import emails from './users.json';
 import { EmailUser } from './types/email-user';
 import { MailcowUser } from './types/mailcow-user';
+import * as fs from 'fs';
+
+const emails = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 function removeVietnameseTones(name: string): string {
     const toneMap: { [key: string]: string } = {
@@ -26,7 +28,7 @@ const DEFAULT_PASSWORD = process.env.MAILCOW_DEFAULT_PASSWORD as string;
 
 // Map email data to user objects
 const users: MailcowUser[] = emails.map(({ email, name, }: EmailUser) => {
-    const [local_part, domain] = email.split('@', 2);
+    const [local_part, domain] = email.toLowerCase().split('@', 2);
     return {
         local_part,
         domain,
